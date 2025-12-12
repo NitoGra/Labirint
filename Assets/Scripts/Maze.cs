@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +10,9 @@ namespace Scripts
         [SerializeField] private int _height = 10;
         [SerializeField] private float _wallHeight = 2f;
         [SerializeField] private float _ñellSize = 2;
-        [Space]
-        [SerializeField] private TargetGoal _goal;
-        [SerializeField] private Player _player;
 
+        private TargetGoal _goal;
+        private Player _player;
         private float _floorHeight = 0.05f;
         private int[,] _mazeGrid;
         private Vector2Int _goalPosition;
@@ -27,6 +27,12 @@ namespace Scripts
             GenerateMaze();
             SpawnMaze();
             PlaceGoal();
+        }
+
+        public void Boosttrap(Player player, TargetGoal goal)
+        {
+            _goal = goal;
+            _player = player;
         }
 
         public Vector3 FindClosestPoint() =>
