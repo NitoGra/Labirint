@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,13 +22,14 @@ namespace Scripts
         {
             _mazePathfinder = new(_сellSize, _player.transform, _goal.transform);
             _goal.FoundTarget += PlaceGoal;
+            _mazeGrid = Algoritms.PrimMazeGenerator(_width,_height);
 
-            GenerateMaze();
+            UpdateFreeCellsList();
             SpawnMaze();
             PlaceGoal();
         }
 
-        public void Boosttrap(Player player, TargetGoal goal)
+        public void Init(Player player, TargetGoal goal)
         {
             _goal = goal;
             _player = player;
@@ -37,68 +37,6 @@ namespace Scripts
 
         public Vector3 FindClosestPoint() =>
             _mazePathfinder.FindClosestPoint(_mazeGrid);
-
-        private void GenerateMaze()//По алгоритму Прима
-        {
-            _mazeGrid = new int[_width, _height];
-
-            for (int x = 0; x < _width; x++)
-                for (int y = 0; y < _height; y++)
-                    _mazeGrid[x, y] = 1;
-
-            int startX = 1;
-            int startY = 1;
-            _mazeGrid[startX, startY] = 0;
-            List<Edge> walls = new();
-
-            if (startX > 1)
-                walls.Add(new Edge(startX, startY, startX - 1, startY));
-
-            if (startX < _width - 2)
-                walls.Add(new Edge(startX, startY, startX + 1, startY));
-
-            if (startY > 1)
-                walls.Add(new Edge(startX, startY, startX, startY - 1));
-
-            if (startY < _height - 2)
-                walls.Add(new Edge(startX, startY, startX, startY + 1));
-
-            while (walls.Count > 0)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, walls.Count);
-                Edge wall = walls[randomIndex];
-                walls.RemoveAt(randomIndex);
-
-                int oppositeX = wall.x2 + (wall.x2 - wall.x1);
-                int oppositeY = wall.y2 + (wall.y2 - wall.y1);
-
-                if (oppositeX >= 0 && oppositeX < _width && oppositeY >= 0 && oppositeY < _height)
-                {
-                    if (_mazeGrid[oppositeX, oppositeY] == 1)
-                    {
-                        _mazeGrid[wall.x2, wall.y2] = 0;
-                        _mazeGrid[oppositeX, oppositeY] = 0;
-
-                        if (oppositeX > 1 && _mazeGrid[oppositeX - 2, oppositeY] == 1)
-                            walls.Add(new Edge(oppositeX, oppositeY, oppositeX - 1, oppositeY));
-
-                        if (oppositeX < _width - 2 && _mazeGrid[oppositeX + 2, oppositeY] == 1)
-                            walls.Add(new Edge(oppositeX, oppositeY, oppositeX + 1, oppositeY));
-
-                        if (oppositeY > 1 && _mazeGrid[oppositeX, oppositeY - 2] == 1)
-                            walls.Add(new Edge(oppositeX, oppositeY, oppositeX, oppositeY - 1));
-
-                        if (oppositeY < _height - 2 && _mazeGrid[oppositeX, oppositeY + 2] == 1)
-                            walls.Add(new Edge(oppositeX, oppositeY, oppositeX, oppositeY + 1));
-                    }
-                }
-            }
-
-            _mazeGrid[1, 0] = 0;
-            _mazeGrid[_width - 2, _height - 1] = 0;
-
-            UpdateFreeCellsList();
-        }
 
         private void SpawnMaze()
         {
@@ -151,20 +89,6 @@ namespace Scripts
                 for (int y = 0; y < _height; y++)
                     if (_mazeGrid[x, y] == (int)MazeParts.Floor)
                         _freeCells.Add(new Vector2Int(x, y));
-        }
-
-        private class Edge
-        {
-            public int x1, y1; // Клетка с проходом
-            public int x2, y2; // Стенка
-
-            public Edge(int x1, int y1, int x2, int y2)
-            {
-                this.x1 = x1;
-                this.y1 = y1;
-                this.x2 = x2;
-                this.y2 = y2;
-            }
         }
     }
 

@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace Scripts
 {
-    internal class Pointer : MonoBehaviour
+    internal class Navigation : MonoBehaviour
     {
-        [SerializeField] private Transform _normalPointer;
+        [SerializeField] private Transform _absolutePointer;
         [SerializeField] private Transform _aStarPointer;
 
         private Transform _goal;
-        private Func<Vector3> _findClosestPoint;
+        private Func<Vector3> _closestPointFind;
 
-        public void Boosttrap(Transform goal, Func<Vector3> findClosestPoint)
+        public void Init(Transform goal, Func<Vector3> findClosestPoint)
         {
             _goal = goal;
-            _findClosestPoint = findClosestPoint;
+            _closestPointFind = findClosestPoint;
         }
 
         private void FixedUpdate()
@@ -24,9 +24,9 @@ namespace Scripts
         }
 
         private void PointerRotate() =>
-            _normalPointer.LookAt(_goal);
+            _absolutePointer.LookAt(_goal);
 
         private void AStarPointerRotate() =>
-            _aStarPointer.LookAt(_findClosestPoint());
+            _aStarPointer.LookAt(_closestPointFind());
     }
 }
