@@ -8,6 +8,13 @@ namespace Scripts
         readonly private float _cellSize;
         readonly private Transform _player;
         readonly private Transform _goal;
+        readonly private Vector2Int[] _directions = new Vector2Int[]
+{
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left
+};
 
         private List<Vector2Int> _currentPath = new();
         private Vector2Int _playerLastPosition;
@@ -20,21 +27,21 @@ namespace Scripts
             _goal = goal;
         }
 
-        public void PlayerResetPosition() => 
+        public void PlayerResetPosition() =>
             _playerLastPosition = Vector2Int.down;
 
         public Vector3 FindClosestPoint(int[,] mazeGrid)
         {
             DebugDrawPath();
+            Vector2Int start = WorldToGridPosition(_player.transform.position);
 
-            if (_playerLastPosition == WorldToGridPosition(_player.transform.position))
+            if (_playerLastPosition == start)
                 return _lastPositon;
 
-            Vector2Int start = WorldToGridPosition(_player.transform.position);
             Vector2Int goalPos = WorldToGridPosition(_goal.transform.position);
             _playerLastPosition = start;
 
-            if (!IsWalkable(mazeGrid, start)|| !IsWalkable(mazeGrid, goalPos))
+            if (!IsWalkable(mazeGrid, start) || !IsWalkable(mazeGrid, goalPos))
                 return GridToWorldPosition(goalPos);
 
             List<Vector2Int> newPath = FindPathAStar(start, goalPos, mazeGrid);
@@ -116,7 +123,7 @@ namespace Scripts
                 position.y < 0 || position.y >= grid.GetLength(1))
                 return false;
 
-            return grid[position.x, position.y] == (int)MazeParts.Floor || grid[position.x, position.y] == (int)MazeParts.Goal;
+            return grid[position.x, position.y] != (int)MazeParts.Wall;
         }
 
         private float Heuristic(Vector2Int a, Vector2Int b) =>
@@ -188,17 +195,9 @@ namespace Scripts
             }
         }
 
-        private static readonly Vector2Int[] _directions = new Vector2Int[]
+        private void DebugDrawPath()
         {
-            Vector2Int.up,
-            Vector2Int.right,
-            Vector2Int.down,
-            Vector2Int.left
-        };
-
-        public void DebugDrawPath()
-        {
-            if (_currentPath == null || _currentPath.Count == 0) 
+            if (_currentPath == null || _currentPath.Count == 0)
                 return;
 
             for (int i = 0; i < _currentPath.Count - 1; i++)

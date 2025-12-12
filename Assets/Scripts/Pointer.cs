@@ -11,14 +11,14 @@ namespace Scripts
 
         private void FixedUpdate()
         {
-            Rotate();
-            ARotate();
+            PointerRotate();
+            AStarPointerRotate();
         }
 
-        private void Rotate() =>
+        private void PointerRotate() =>
             _normalPointer.LookAt(_goal);
 
-        private void ARotate() =>
+        private void AStarPointerRotate() =>
             _aStarPointer.LookAt(_maze.FindClosestPoint());
     }
 }

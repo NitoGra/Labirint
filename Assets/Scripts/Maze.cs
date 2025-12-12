@@ -13,6 +13,7 @@ namespace Scripts
         [SerializeField] private TargetGoal _goal;
         [SerializeField] private Player _player;
 
+        private float _floorHeight = 0.05f;
         private int[,] _mazeGrid;
         private Vector2Int _goalPosition;
         private List<Vector2Int> _freeCells = new();
@@ -21,6 +22,8 @@ namespace Scripts
         private void Start()
         {
             _mazePathfinder = new(_ñellSize, _player.transform, _goal.transform);
+            _goal.FoundTarget += PlaceGoal;
+
             GenerateMaze();
             SpawnMaze();
             PlaceGoal();
@@ -29,7 +32,7 @@ namespace Scripts
         public Vector3 FindClosestPoint() =>
             _mazePathfinder.FindClosestPoint(_mazeGrid);
 
-        private void GenerateMaze()
+        private void GenerateMaze()//Ïî àëãîðèòìó Ïðèìà
         {
             _mazeGrid = new int[_width, _height];
 
@@ -114,7 +117,7 @@ namespace Scripts
                     else
                     {
                         mazePart.transform.localPosition = new(mazePart.transform.localPosition.x, -_wallHeight / 2, mazePart.transform.localPosition.z);
-                        mazePart.transform.localScale = new Vector3(_ñellSize, 0.1f, _ñellSize);
+                        mazePart.transform.localScale = new Vector3(_ñellSize, _floorHeight, _ñellSize);
                         mazePart.name = $"Floor_{x}_{y}";
                     }
                 }
@@ -128,8 +131,7 @@ namespace Scripts
 
             _goalPosition = _freeCells[UnityEngine.Random.Range(0, _freeCells.Count)];
             _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazeParts.Goal;
-            Vector3 position = new(_goalPosition.x * _ñellSize, 0, _goalPosition.y * _ñellSize);
-            _goal.transform.position = position;
+            _goal.transform.position = new(_goalPosition.x * _ñellSize, 0, _goalPosition.y * _ñellSize);
 
             UpdateFreeCellsList();
             _mazePathfinder.PlayerResetPosition();
@@ -144,9 +146,6 @@ namespace Scripts
                     if (_mazeGrid[x, y] == (int)MazeParts.Floor)
                         _freeCells.Add(new Vector2Int(x, y));
         }
-
-        public void MoveGoalToNewPosition() => 
-            PlaceGoal();
 
         private class Edge
         {

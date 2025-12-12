@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Scripts
 {
-    public class TargetGoal : MonoBehaviour
+    internal class TargetGoal : MonoBehaviour
     {
-        [SerializeField] private Maze _maze;
+        public event Action FoundTarget;
 
         private void OnCollisionEnter(Collision collision) =>
-            _maze.MoveGoalToNewPosition();
+            FoundTarget.Invoke();
     }
 }
