@@ -146,8 +146,8 @@ namespace Scripts
 
         internal class Edge
         {
-            public int x1, y1; // Клетка с проходом
-            public int x2, y2; // Стенка
+            public int x1, y1; //Floor
+            public int x2, y2; //Wall
 
             public Edge(int x1, int y1, int x2, int y2)
             {
@@ -161,9 +161,9 @@ namespace Scripts
         internal class Node
         {
             public Vector2Int Position { get; }
-            public float GCost { get; set; }        //cтоимость от старта
-            public float HCost { get; }             //стоимость до цели
-            public float FCost => GCost + HCost;    //общая стоимость
+            public float GCost { get; set; }        //cost from start
+            public float HCost { get; }             //cost to target
+            public float FCost => GCost + HCost;    //total cost
             public Node Parent { get; set; }
 
             public Node(Vector2Int position, float gCost, float hCost, Node parent)

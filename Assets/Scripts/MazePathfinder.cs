@@ -5,9 +5,9 @@ namespace Scripts
 {
     internal class MazePathfinder
     {
-        readonly private float _cellSize;
-        readonly private Transform _player;
-        readonly private Transform _goal;
+        private readonly float _cellSize;
+        private readonly Transform _player;
+        private readonly Transform _goal;
 
         private List<Vector2Int> _currentPath = new();
         private Vector2Int _playerLastPosition;
@@ -26,16 +26,16 @@ namespace Scripts
         public Vector3 FindClosestPoint(int[,] mazeGrid)
         {
             DebugDrawPath();
-            Vector2Int start = ParsWorldToGridPosition(_player.transform.position);
+            Vector2Int start = ParseWorldToGridPosition(_player.transform.position);
 
             if (_playerLastPosition == start)
                 return _lastPositon;
 
-            Vector2Int goalPos = ParsWorldToGridPosition(_goal.transform.position);
+            Vector2Int goalPos = ParseWorldToGridPosition(_goal.transform.position);
             _playerLastPosition = start;
 
             if (!IsWalkable(mazeGrid, start) || !IsWalkable(mazeGrid, goalPos))
-                return ParsGridToWorldPosition(goalPos);
+                return ParseGridToWorldPosition(goalPos);
 
             List<Vector2Int> newPath = Algoritms.FindPathAStar(start, goalPos, mazeGrid, IsWalkable);
 
@@ -51,13 +51,12 @@ namespace Scripts
             return _lastPositon;
         }
 
-        private Vector2Int ParsWorldToGridPosition(Vector3 position) =>
+        private Vector2Int ParseWorldToGridPosition(Vector3 position) =>
             new(Mathf.RoundToInt(position.x / _cellSize),
                 Mathf.RoundToInt(position.z / _cellSize));
 
-        private Vector3 ParsGridToWorldPosition(Vector2Int gridPos) =>
+        private Vector3 ParseGridToWorldPosition(Vector2Int gridPos) =>
             new(gridPos.x * _cellSize, 0, gridPos.y * _cellSize);
-
 
         private bool IsWalkable(int[,] grid, Vector2Int position)
         {
@@ -72,11 +71,11 @@ namespace Scripts
         {
             if (_currentPath == null || _currentPath.Count == 0)
             {
-                _lastPositon = ParsGridToWorldPosition(ParsWorldToGridPosition(_goal.transform.position));
+                _lastPositon = ParseGridToWorldPosition(ParseWorldToGridPosition(_goal.transform.position));
                 return;
             }
 
-            Vector2Int currentGridPos = ParsWorldToGridPosition(_player.transform.position);
+            Vector2Int currentGridPos = ParseWorldToGridPosition(_player.transform.position);
             Vector2Int nextPoint = Vector2Int.zero;
 
             float closestDistance = float.MaxValue;
@@ -98,9 +97,9 @@ namespace Scripts
             else if (closestIndex >= 0)
                 nextPoint = _currentPath[closestIndex];
             else
-                nextPoint = ParsWorldToGridPosition(_goal.transform.position);
+                nextPoint = ParseWorldToGridPosition(_goal.transform.position);
 
-            _lastPositon = ParsGridToWorldPosition(nextPoint);
+            _lastPositon = ParseGridToWorldPosition(nextPoint);
         }
 
         private void DebugDrawPath()
@@ -109,7 +108,7 @@ namespace Scripts
                 return;
 
             for (int i = 0; i < _currentPath.Count - 1; i++)
-                Debug.DrawLine(ParsGridToWorldPosition(_currentPath[i]), ParsGridToWorldPosition(_currentPath[i + 1]), Color.green, 2);
+                Debug.DrawLine(ParseGridToWorldPosition(_currentPath[i]), ParseGridToWorldPosition(_currentPath[i + 1]), Color.green, 2);
 
             if (_lastPositon != Vector3.zero)
                 Debug.DrawRay(_lastPositon, Vector3.up * 2, Color.red, 2);

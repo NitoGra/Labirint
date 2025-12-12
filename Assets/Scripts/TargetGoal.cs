@@ -5,9 +5,9 @@ namespace Scripts
 {
     internal class TargetGoal : MonoBehaviour
     {
-        public event Action FoundTarget;
+        public event Action<Transform> FoundTarget;
 
         private void OnCollisionEnter(Collision collision) =>
-            FoundTarget.Invoke();
+            FoundTarget.Invoke(transform);
     }
 }

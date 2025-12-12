@@ -12,7 +12,7 @@ namespace Scripts
         private void Awake()
         {
             _pointer.Init(_goal.transform, _maze.FindClosestPoint);
-            _maze.Init(_player, _goal);
+            _maze.Init(_player.transform, _goal);
         }
     }
 }
