@@ -7,8 +7,8 @@ namespace Scripts
     {
         [SerializeField] private int _width = 10;
         [SerializeField] private int _height = 10;
-        [SerializeField] private float _cellSize = 2f;
         [SerializeField] private float _wallHeight = 2f;
+        [SerializeField] private float _ñellSize = 2;
         [Space]
         [SerializeField] private TargetGoal _goal;
         [SerializeField] private Player _player;
@@ -16,13 +16,18 @@ namespace Scripts
         private int[,] _mazeGrid;
         private Vector2Int _goalPosition;
         private List<Vector2Int> _freeCells = new();
+        private MazePathfinder _mazePathfinder;
 
         private void Start()
         {
+            _mazePathfinder = new(_ñellSize, _player.transform, _goal.transform);
             GenerateMaze();
             SpawnMaze();
             PlaceGoal();
         }
+
+        public Vector3 FindClosestPoint() =>
+            _mazePathfinder.FindClosestPoint(_mazeGrid);
 
         private void GenerateMaze()
         {
@@ -51,7 +56,7 @@ namespace Scripts
 
             while (walls.Count > 0)
             {
-                int randomIndex = Random.Range(0, walls.Count);
+                int randomIndex = UnityEngine.Random.Range(0, walls.Count);
                 Edge wall = walls[randomIndex];
                 walls.RemoveAt(randomIndex);
 
@@ -91,7 +96,7 @@ namespace Scripts
             foreach (Transform child in transform)
                 Destroy(child.gameObject);
 
-            _player.transform.position = Vector3.right;
+            _player.transform.position = Vector3.right * _ñellSize;
 
             for (int x = 0; x < _width; x++)
             {
@@ -99,17 +104,17 @@ namespace Scripts
                 {
                     GameObject mazePart = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     mazePart.transform.parent = transform;
-                    mazePart.transform.position = new(x * _cellSize, 0, y * _cellSize);
+                    mazePart.transform.position = new(x * _ñellSize, 0, y * _ñellSize);
 
-                    if (_mazeGrid[x, y] == 1)
+                    if (_mazeGrid[x, y] == (int)MazeParts.Wall)
                     {
-                        mazePart.transform.localScale = new Vector3(_cellSize, _wallHeight, _cellSize);
+                        mazePart.transform.localScale = new Vector3(_ñellSize, _wallHeight, _ñellSize);
                         mazePart.name = $"Wall_{x}_{y}";
                     }
                     else
                     {
                         mazePart.transform.localPosition = new(mazePart.transform.localPosition.x, -_wallHeight / 2, mazePart.transform.localPosition.z);
-                        mazePart.transform.localScale = new Vector3(_cellSize, 0.1f, _cellSize);
+                        mazePart.transform.localScale = new Vector3(_ñellSize, 0.1f, _ñellSize);
                         mazePart.name = $"Floor_{x}_{y}";
                     }
                 }
@@ -118,13 +123,16 @@ namespace Scripts
 
         private void PlaceGoal()
         {
-            int randomIndex = Random.Range(0, _freeCells.Count);
-            _goalPosition = _freeCells[randomIndex];
-            _mazeGrid[_goalPosition.x, _goalPosition.y] = 2;
-            Vector3 position = new(_goalPosition.x * _cellSize, 0, _goalPosition.y * _cellSize);
+            if (_mazeGrid[_goalPosition.x, _goalPosition.y] == (int)MazeParts.Goal)
+                _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazeParts.Floor;
+
+            _goalPosition = _freeCells[UnityEngine.Random.Range(0, _freeCells.Count)];
+            _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazeParts.Goal;
+            Vector3 position = new(_goalPosition.x * _ñellSize, 0, _goalPosition.y * _ñellSize);
             _goal.transform.position = position;
 
             UpdateFreeCellsList();
+            _mazePathfinder.PlayerResetPosition();
         }
 
         private void UpdateFreeCellsList()
@@ -133,13 +141,12 @@ namespace Scripts
 
             for (int x = 0; x < _width; x++)
                 for (int y = 0; y < _height; y++)
-                    if (_mazeGrid[x, y] == 0)
+                    if (_mazeGrid[x, y] == (int)MazeParts.Floor)
                         _freeCells.Add(new Vector2Int(x, y));
         }
 
-        public void MoveGoalToNewPosition() => PlaceGoal();
-        public int[,] GetMazeGrid() => _mazeGrid;
-        public Transform GetGoalTransform() => _goal.transform;
+        public void MoveGoalToNewPosition() => 
+            PlaceGoal();
 
         private class Edge
         {
@@ -154,5 +161,12 @@ namespace Scripts
                 this.y2 = y2;
             }
         }
+    }
+
+    internal enum MazeParts
+    {
+        Floor = 0,
+        Wall = 1,
+        Goal = 2
     }
 }

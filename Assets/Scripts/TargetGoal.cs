@@ -6,9 +6,7 @@ namespace Scripts
     {
         [SerializeField] private Maze _maze;
 
-        private void OnCollisionEnter(Collision collision)
-        {
+        private void OnCollisionEnter(Collision collision) =>
             _maze.MoveGoalToNewPosition();
-        }
     }
 }
