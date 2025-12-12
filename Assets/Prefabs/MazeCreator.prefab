@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4031907331813108682}
   - component: {fileID: 2055527966223356214}
-  - component: {fileID: 8813390611499519400}
   m_Layer: 0
   m_Name: MazeCreator
   m_TagString: Untagged
@@ -49,21 +48,3 @@ MonoBehaviour:
   _height: 9
   _wallHeight: 5
   "_\u0441ellSize": 5
-  _goal: {fileID: 0}
-  _player: {fileID: 0}
---- !u!114 &8813390611499519400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447352024704102645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42efc9be2509be44595b327b5ba59281, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Scripts.Pointer
-  _maze: {fileID: 2055527966223356214}
-  _normalPointer: {fileID: 0}
-  _aStarPointer: {fileID: 0}
-  _goal: {fileID: 0}

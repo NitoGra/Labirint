@@ -262,11 +262,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4623214095854216086, guid: cef59dfd051f8e341aa99c8a0c28bc37, type: 3}
   m_PrefabInstance: {fileID: 4958542790557278298}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &579320750 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5025375836066842424, guid: ab98fd0920697c542b5cc5b3221b418e, type: 3}
-  m_PrefabInstance: {fileID: 8106731868545916137}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &579320751 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3837206120328361830, guid: ab98fd0920697c542b5cc5b3221b418e, type: 3}
@@ -699,14 +694,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MazeCreator
       objectReference: {fileID: 0}
-    - target: {fileID: 2055527966223356214, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
-      propertyPath: _goal
-      value: 
-      objectReference: {fileID: 579320751}
-    - target: {fileID: 2055527966223356214, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
-      propertyPath: _player
-      value: 
-      objectReference: {fileID: 484153214}
     - target: {fileID: 4031907331813108682, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -747,20 +734,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8813390611499519400, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
-      propertyPath: _goal
-      value: 
-      objectReference: {fileID: 579320750}
-    - target: {fileID: 8813390611499519400, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
-      propertyPath: _aStarPointer
-      value: 
-      objectReference: {fileID: 2030320697550504487}
-    - target: {fileID: 8813390611499519400, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
-      propertyPath: _normalPointer
-      value: 
-      objectReference: {fileID: 3841971025699328014}
-    m_RemovedComponents:
-    - {fileID: 8813390611499519400, guid: 8c17344e0740c664aa3d98eebef12e88, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
