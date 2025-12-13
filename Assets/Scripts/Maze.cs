@@ -5,7 +5,7 @@ namespace Scripts
 {
     internal class Maze : MonoBehaviour
     {
-        private readonly float _floorHeight = 0.05f;
+        private const float FloorHeight = 0.05f;
         private readonly List<Vector2Int> _freeCells = new();
 
         [SerializeField] private int _width = 10;
@@ -21,7 +21,7 @@ namespace Scripts
         {
             goal.FoundTarget += PlaceGoal;
             _mazePathfinder = new(_cellSize, playerTransform.transform, goal.transform);
-            _mazeGrid = Algoritms.PrimMazeGenerator(_width, _height);
+            _mazeGrid = Algorithms.GenerateMazeByPrim(_width, _height);
 
             UpdateFreeCellsList();
             SpawnMaze(playerTransform);
@@ -46,7 +46,7 @@ namespace Scripts
                     mazePart.transform.parent = transform;
                     mazePart.transform.position = new(x * _cellSize, 0, y * _cellSize);
 
-                    if (_mazeGrid[x, y] == (int)MazeParts.Wall)
+                    if (_mazeGrid[x, y] == (int)MazePart.Wall)
                     {
                         mazePart.transform.localScale = new Vector3(_cellSize, _wallHeight, _cellSize);
                         mazePart.name = $"Wall_{x}_{y}";
@@ -54,7 +54,7 @@ namespace Scripts
                     else
                     {
                         mazePart.transform.localPosition = new(mazePart.transform.localPosition.x, -_wallHeight / 2, mazePart.transform.localPosition.z);
-                        mazePart.transform.localScale = new Vector3(_cellSize, _floorHeight, _cellSize);
+                        mazePart.transform.localScale = new Vector3(_cellSize, FloorHeight, _cellSize);
                         mazePart.name = $"Floor_{x}_{y}";
                     }
                 }
@@ -63,11 +63,11 @@ namespace Scripts
 
         private void PlaceGoal(Transform goalTransform)
         {
-            if (_mazeGrid[_goalPosition.x, _goalPosition.y] == (int)MazeParts.Goal)
-                _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazeParts.Floor;
+            if (_mazeGrid[_goalPosition.x, _goalPosition.y] == (int)MazePart.Goal)
+                _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazePart.Floor;
 
-            _goalPosition = _freeCells[UnityEngine.Random.Range(0, _freeCells.Count)];
-            _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazeParts.Goal;
+            _goalPosition = _freeCells[Random.Range(0, _freeCells.Count)];
+            _mazeGrid[_goalPosition.x, _goalPosition.y] = (int)MazePart.Goal;
             goalTransform.position = new(_goalPosition.x * _cellSize, 0, _goalPosition.y * _cellSize);
 
             UpdateFreeCellsList();
@@ -80,7 +80,7 @@ namespace Scripts
 
             for (int x = 0; x < _width; x++)
                 for (int y = 0; y < _height; y++)
-                    if (_mazeGrid[x, y] == (int)MazeParts.Floor)
+                    if (_mazeGrid[x, y] == (int)MazePart.Floor)
                         _freeCells.Add(new Vector2Int(x, y));
         }
     }

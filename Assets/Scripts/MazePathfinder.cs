@@ -37,7 +37,7 @@ namespace Scripts
             if (!IsWalkable(mazeGrid, start) || !IsWalkable(mazeGrid, goalPos))
                 return ParseGridToWorldPosition(goalPos);
 
-            List<Vector2Int> newPath = Algoritms.FindPathAStar(start, goalPos, mazeGrid, IsWalkable);
+            List<Vector2Int> newPath = Algorithms.FindPathAStar(start, goalPos, mazeGrid, IsWalkable);
 
             if (newPath.Count > 0)
                 _currentPath = newPath;
@@ -64,7 +64,7 @@ namespace Scripts
                 position.y < 0 || position.y >= grid.GetLength(1))
                 return false;
 
-            return grid[position.x, position.y] != (int)MazeParts.Wall;
+            return grid[position.x, position.y] != (int)MazePart.Wall;
         }
 
         private void NextPathPoint()
