@@ -6,7 +6,6 @@ namespace Scripts
     internal class Maze : MonoBehaviour
     {
         private const float FloorHeight = 0.05f;
-        private readonly List<Vector2Int> _freeCells = new();
 
         [SerializeField] private int _width = 10;
         [SerializeField] private int _height = 10;
@@ -16,6 +15,7 @@ namespace Scripts
         private int[,] _mazeGrid;
         private Vector2Int _goalPosition;
         private MazePathfinder _mazePathfinder;
+        private readonly List<Vector2Int> _freeCells = new();
 
         public void Init(Transform playerTransform, TargetGoal goal)
         {

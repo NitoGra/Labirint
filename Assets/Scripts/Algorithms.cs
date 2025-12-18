@@ -5,6 +5,14 @@ namespace Scripts
 {
     internal static class Algorithms
     {
+        internal readonly static Vector2Int[] directions = new Vector2Int[]
+        {
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left
+        };
+
         internal static List<Vector2Int> FindPathAStar(Vector2Int start, Vector2Int goal, int[,] grid, System.Func<int[,], Vector2Int, bool> isWalkable)
         {
             int width = grid.GetLength(0);
@@ -59,14 +67,6 @@ namespace Scripts
 
         internal static float Heuristic(Vector2Int a, Vector2Int b) =>
                 Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
-
-        internal readonly static Vector2Int[] directions = new Vector2Int[]
-        {
-            Vector2Int.up,
-            Vector2Int.right,
-            Vector2Int.down,
-            Vector2Int.left
-        };
 
         internal static List<Vector2Int> RetracePath(Node endNode)
         {
