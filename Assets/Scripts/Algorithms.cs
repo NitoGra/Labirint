@@ -12,6 +12,7 @@ namespace Scripts
             Vector2Int.down,
             Vector2Int.left
         };
+//debug test
 
         internal static List<Vector2Int> FindPathAStar(Vector2Int start, Vector2Int goal, int[,] grid, System.Func<int[,], Vector2Int, bool> isWalkable)
         {

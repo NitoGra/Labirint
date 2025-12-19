@@ -6,7 +6,7 @@ namespace Scripts
     [RequireComponent(typeof(Rigidbody))]
     internal class Player : MonoBehaviour
     {
-        private const float Heigth = 1.1f;
+        private const float Height = 1.1f;
 
         [SerializeField] private Rigidbody _rigidbody;
         [Space]
@@ -58,7 +58,7 @@ namespace Scripts
 
         private void Jump(InputAction.CallbackContext context)
         {
-            if (Physics.Raycast(transform.position, Vector3.down, Heigth) == false)
+            if (Physics.Raycast(transform.position, Vector3.down, Height) == false)
                 return;
 
             _rigidbody.linearVelocity += _jumpForce * Vector3.up;
